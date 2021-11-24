@@ -1,6 +1,8 @@
 package facades;
 
+import dtos.GenreDTO;
 import dtos.RenameMeDTO;
+import entities.Genre;
 import entities.RenameMe;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -76,6 +78,12 @@ public class FacadeExample {
         TypedQuery<RenameMe> query = em.createQuery("SELECT r FROM RenameMe r", RenameMe.class);
         List<RenameMe> rms = query.getResultList();
         return RenameMeDTO.getDtos(rms);
+    }
+    public List<GenreDTO> getAllGenres(){
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Genre> query = em.createQuery("SELECT g FROM Genre g", Genre.class);
+        List<Genre> genres = query.getResultList();
+        return GenreDTO.getDtos(genres);
     }
     
     public static void main(String[] args) {

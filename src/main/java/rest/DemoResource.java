@@ -21,6 +21,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
+
+import facades.FacadeExample;
 import utils.EMF_Creator;
 import utils.HttpUtils;
 import utils.SetupTestUsers;
@@ -34,6 +36,7 @@ public class DemoResource {
 
     
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+    private final FacadeExample FACADE =  FacadeExample.getFacadeExample(EMF);
     @Context
     private UriInfo context;
 
@@ -85,6 +88,14 @@ public class DemoResource {
     public String populate() {
         SetupTestUsers.populateUsers();
        return "You have been populated";
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("genres")
+    public String showAllGenres() {
+        List <GenreDTO> allGenres = FACADE.getAllGenres();
+        return gson.toJson(allGenres);
     }
 
 
