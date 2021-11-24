@@ -50,6 +50,7 @@ public class RenameMeResourceTest {
         RestAssured.defaultParser = Parser.JSON;
     }
 
+
     @AfterAll
     public static void closeTestServer() {
         //System.in.read();
