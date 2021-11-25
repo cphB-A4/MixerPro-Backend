@@ -109,7 +109,8 @@ public class DemoResource {
     }
 
     @Path("{id}")
-    @RolesAllowed("user")
+    //uncomment later
+   // @RolesAllowed("user")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

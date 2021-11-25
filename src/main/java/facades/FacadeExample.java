@@ -6,10 +6,12 @@ import entities.Genre;
 import entities.RenameMe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.WebApplicationException;
 
 //import errorhandling.RenameMeNotFoundException;
 import entities.User;
@@ -58,26 +60,43 @@ public class FacadeExample {
         return new RenameMeDTO(rme);
     }
 
-    public void addGenresToPerson(List<GenreDTO> genreDTOList, String username){
-        EntityManager em = emf.createEntityManager();
-        List<Genre> genreList = new ArrayList<>();
-        User user = em.find(User.class,username);
-        for (GenreDTO genreDTO: genreDTOList) {
+
+
+public void addGenresToPerson(List<GenreDTO> genreDTOList, String username){
+    EntityManager em = emf.createEntityManager();
+    List<Genre> genreList = new ArrayList<>();
+    User user = em.find(User.class,username);
+
+    List<String> preSelectedGenres = user.getPreSelectedGenres();
+    System.out.println(preSelectedGenres);
+    if (preSelectedGenres == null) {
+        for (GenreDTO genreDTO : genreDTOList) {
             Genre genre = new Genre(genreDTO.getName());
-           // genreList.add(genre);
+            // genreList.add(genre);
             user.addGenre(genre);
         }
-
-        try {
-            em.getTransaction().begin();
-            em.merge(user);
-            em.getTransaction().commit();
-
-        } finally {
-            em.close();
+    } else {
+        //sammenligne tideligere genre tilknyttet en user med nye valgte genre
+        for (GenreDTO genreDTO : genreDTOList) {
+           if(preSelectedGenres.contains(genreDTO.getName())){
+               throw new WebApplicationException("Update failed :" + genreDTO.getName() + " already chosen",400);
+           }
+            Genre genre = new Genre(genreDTO.getName());
+            // genreList.add(genre);
+            user.addGenre(genre);
         }
-
     }
+
+    try {
+        em.getTransaction().begin();
+        em.merge(user);
+        em.getTransaction().commit();
+
+    } finally {
+        em.close();
+    }
+
+}
     public RenameMeDTO getById(long id) { //throws RenameMeNotFoundException {
         EntityManager em = emf.createEntityManager();
         RenameMe rm = em.find(RenameMe.class, id);

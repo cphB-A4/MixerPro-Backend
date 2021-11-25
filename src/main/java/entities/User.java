@@ -43,6 +43,17 @@ public class User implements Serializable {
   @ManyToMany
   private List<Genre> favouriteGenres = new ArrayList<>();
 
+  public List<String> getPreSelectedGenres() {
+    if (favouriteGenres.isEmpty()) {
+      return null;
+    }
+    List<String> preselectedGenresAsString = new ArrayList<>();
+    favouriteGenres.forEach((genre) -> {
+      preselectedGenresAsString.add(genre.getName());
+    });
+    return preselectedGenresAsString;
+  }
+
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
       return null;
