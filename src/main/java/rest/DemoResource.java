@@ -112,7 +112,7 @@ public class DemoResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String addEditGenres(@PathParam("id") int id, String genres) {
+    public String addEditGenres(@PathParam("id") String username, String genres) {
         try {
             //{ {name: "rap"}, {name: "pop"} }
 
@@ -123,7 +123,7 @@ public class DemoResource {
             for (GenreDTO genreDTO : genreDTOList) {
                 System.out.println(genreDTO.getName());
             }
-             FACADE.addGenresToPerson(genreDTOList,"user");
+             FACADE.addGenresToPerson(genreDTOList,username);
             return "worked";
         } catch (WebApplicationException ex) {
             String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
