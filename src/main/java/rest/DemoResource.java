@@ -95,7 +95,7 @@ public class DemoResource {
     @Path("genres")
     public String showAllGenres() {
         List <GenreDTO> allGenres = FACADE.getAllGenres();
-        return gson.toJson(allGenres);
+        return /*"\"genres\":" +  */gson.toJson(allGenres);
     }
 
 
