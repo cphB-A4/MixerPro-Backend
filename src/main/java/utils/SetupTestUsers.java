@@ -1,11 +1,15 @@
 package utils;
 
 
+import dtos.GenreDTO;
 import entities.Role;
 import entities.User;
+import facades.FacadeExample;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SetupTestUsers {
 
@@ -13,6 +17,7 @@ public class SetupTestUsers {
 
     EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
     EntityManager em = emf.createEntityManager();
+    FacadeExample fe = FacadeExample.getFacadeExample(emf);
 
     // IMPORTAAAAAAAAAANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // This breaks one of the MOST fundamental security rules in that it ships with default users and passwords
@@ -44,6 +49,12 @@ public class SetupTestUsers {
     System.out.println("Testing user with OK password: " + user.verifyPassword("test"));
     System.out.println("Testing user with wrong password: " + user.verifyPassword("test1"));
     System.out.println("Created TEST Users");
+
+    //Test user_genre table
+  /*  List<GenreDTO> genreDTOList = new ArrayList<>();
+    genreDTOList.add(new GenreDTO("rap"));
+    genreDTOList.add(new GenreDTO("pop"));
+    fe.addGenresToPerson(genreDTOList,"user");*/
 
   }
   public static void main(String[] args) {

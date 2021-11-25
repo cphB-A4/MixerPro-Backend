@@ -4,12 +4,15 @@ import dtos.GenreDTO;
 import dtos.RenameMeDTO;
 import entities.Genre;
 import entities.RenameMe;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 
 //import errorhandling.RenameMeNotFoundException;
+import entities.User;
 import utils.EMF_Creator;
 
 /**
@@ -54,6 +57,27 @@ public class FacadeExample {
         }
         return new RenameMeDTO(rme);
     }
+
+    public void addGenresToPerson(List<GenreDTO> genreDTOList, String username){
+        EntityManager em = emf.createEntityManager();
+        List<Genre> genreList = new ArrayList<>();
+        User user = em.find(User.class,username);
+        for (GenreDTO genreDTO: genreDTOList) {
+            Genre genre = new Genre(genreDTO.getName());
+           // genreList.add(genre);
+            user.addGenre(genre);
+        }
+
+        try {
+            em.getTransaction().begin();
+            em.merge(user);
+            em.getTransaction().commit();
+
+        } finally {
+            em.close();
+        }
+
+    }
     public RenameMeDTO getById(long id) { //throws RenameMeNotFoundException {
         EntityManager em = emf.createEntityManager();
         RenameMe rm = em.find(RenameMe.class, id);
@@ -85,6 +109,7 @@ public class FacadeExample {
         List<Genre> genres = query.getResultList();
         return GenreDTO.getDtos(genres);
     }
+
     
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();

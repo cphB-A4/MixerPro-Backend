@@ -5,10 +5,14 @@
  */
 package facades;
 
+import dtos.GenreDTO;
 import dtos.RenameMeDTO;
 import entities.RenameMe;
 import javax.persistence.EntityManagerFactory;
 import utils.EMF_Creator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,6 +25,7 @@ public class Populator {
         fe.create(new RenameMeDTO(new RenameMe("First 1", "Last 1")));
         fe.create(new RenameMeDTO(new RenameMe("First 2", "Last 2")));
         fe.create(new RenameMeDTO(new RenameMe("First 3", "Last 3")));
+
     }
     
     public static void main(String[] args) {

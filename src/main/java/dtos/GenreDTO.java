@@ -8,6 +8,11 @@ import java.util.List;
 
 public class GenreDTO {
     private String name;
+    private List<GenreDTO> genreDTOList;
+
+    public GenreDTO(List<GenreDTO>genreDTOList){
+        this.genreDTOList=genreDTOList;
+    }
 
     public static List<GenreDTO> getDtos(List<Genre> genres){
         List<GenreDTO> genreDtos = new ArrayList();

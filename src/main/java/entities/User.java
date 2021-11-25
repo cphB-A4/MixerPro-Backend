@@ -36,6 +36,13 @@ public class User implements Serializable {
   @ManyToMany
   private List<Role> roleList = new ArrayList<>();
 
+
+  @JoinTable(name = "user_genres", joinColumns = {
+          @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
+          @JoinColumn(name = "genre_name", referencedColumnName = "genre_name")})
+  @ManyToMany
+  private List<Genre> favouriteGenres = new ArrayList<>();
+
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
       return null;
@@ -63,6 +70,10 @@ public class User implements Serializable {
   // Hash a password for the first time
   //String hashed = BCrypt.hashpw(userPass, BCrypt.gensalt());
 
+  public void addGenre(Genre genre){
+    this.favouriteGenres.add(genre);
+
+  }
 
   public String getUserName() {
     return userName;

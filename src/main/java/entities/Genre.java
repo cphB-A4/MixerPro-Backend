@@ -1,17 +1,17 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "genre")
 @Entity
 public class Genre {
     @Id
-    @Column(name = "name", nullable = false)
+    @Column(name = "genre_name", nullable = false)
     private String name;
 
+    @ManyToMany(mappedBy = "favouriteGenres")
+    private List<User> userList;
     public String getName() {
         return name;
     }
