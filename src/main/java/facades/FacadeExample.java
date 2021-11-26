@@ -79,8 +79,9 @@ public void addGenresToPerson(List<GenreDTO> genreDTOList, String username){
         //sammenligne tideligere genre tilknyttet en user med nye valgte genre
         for (GenreDTO genreDTO : genreDTOList) {
            if(preSelectedGenres.contains(genreDTO.getName())){
-               throw new WebApplicationException("Update failed :" + genreDTO.getName() + " already chosen",400);
+               throw new WebApplicationException( genreDTO.getName() + " have already been added. Try again",400);
            }
+            System.out.println("helloooooo");
             Genre genre = new Genre(genreDTO.getName());
             // genreList.add(genre);
             user.addGenre(genre);

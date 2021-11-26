@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import dtos.*;
 import entities.User;
@@ -116,7 +118,8 @@ public class DemoResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String addEditGenres(@PathParam("id") String username, String genres) {
         try {
-            //{ {name: "rap"}, {name: "pop"} }
+            //[ {name: "rap"}, {name: "pop"} ]
+            System.out.println(genres);
 
             Type genreTypeList = new TypeToken<ArrayList<GenreDTO>>(){}.getType();
             List<GenreDTO> genreDTOList = gson.fromJson(genres,genreTypeList);
@@ -129,7 +132,8 @@ public class DemoResource {
             return "worked";
         } catch (WebApplicationException ex) {
             String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
-            return errorString;
+            throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
+           // return errorString;
         }
 
     }
