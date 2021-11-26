@@ -105,10 +105,17 @@ public class DemoResource {
         return /*"\"genres\":" +  */gson.toJson(allGenres);
     }
 
-    public <T> List<T> getList(String jsonArray, Class<T> clazz) {
-        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
-        return new Gson().fromJson(jsonArray, typeOfT);
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("userGenres/{username}")
+   // @RolesAllowed("user")
+    public String getUsersFavouriteGenres(@PathParam("username") String username) {
+
+    List<String> usersFavouriteGenres = FACADE.getUsersFavouriteGenres(username);
+
+        return gson.toJson(usersFavouriteGenres);
     }
+
 
     @Path("{id}")
     //uncomment later

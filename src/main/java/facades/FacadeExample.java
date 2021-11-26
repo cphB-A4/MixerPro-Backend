@@ -60,7 +60,13 @@ public class FacadeExample {
         return new RenameMeDTO(rme);
     }
 
+public List<String> getUsersFavouriteGenres(String username) {
+    EntityManager em = emf.createEntityManager();
+    User user = em.find(User.class,username);
+    List<String> userSFavouriteGenres = user.getPreSelectedGenres();
+    return userSFavouriteGenres;
 
+}
 
 public void addGenresToPerson(List<GenreDTO> genreDTOList, String username){
     EntityManager em = emf.createEntityManager();
