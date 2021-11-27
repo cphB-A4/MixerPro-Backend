@@ -116,6 +116,15 @@ public class DemoResource {
         return gson.toJson(usersFavouriteGenres);
     }
 
+    //delete genre from user
+public String deleteGenreFromUser (String genre){
+    String thisuser = securityContext.getUserPrincipal().getName();
+
+    //facade.deleteGenreFromUser
+    // deleteGenreFromUser(genre, thisuser)
+        return "";
+}
+
 
     @Path("{id}")
     //uncomment later
