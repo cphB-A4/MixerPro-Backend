@@ -11,6 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
 
 import errorhandling.API_Exception;
+import errorhandling.UserNotFoundException;
 import security.errorhandling.AuthenticationException;
 
 import java.util.List;
@@ -67,6 +68,40 @@ public class UserFacade {
         }
         return new GenreDTO(genre);
     }
+
+    public String updateProfileDescription(String jsonDescription, String username) throws UserNotFoundException, API_Exception {
+        EntityManager em = emf.createEntityManager();
+        User user;
+        String description;
+        try {
+            JsonObject json = JsonParser.parseString(jsonDescription).getAsJsonObject();
+            description = json.get("description").getAsString();
+
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied",400,e);
+        }
+        try {
+
+            user = em.find(User.class, username);
+            user.setProfileDescription(description);
+            if (user == null) {
+                throw new UserNotFoundException();
+            }
+        } catch (UserNotFoundException ex){
+            throw new UserNotFoundException(ex.getMessage());
+        }
+            try {
+                em.getTransaction().begin();
+                em.merge(user);
+                em.getTransaction().commit();
+
+    } finally {
+                em.close();
+
+    }
+        return "Description successfully updated";
+    }
+
 
     public String deleteGenreFromUser(String jsonGenre, String username) throws API_Exception {
         EntityManager em = emf.createEntityManager();

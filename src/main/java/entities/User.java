@@ -43,6 +43,12 @@ public class User implements Serializable {
   @ManyToMany
   private List<Genre> favouriteGenres = new ArrayList<>();
 
+  @Column(name = "profileDescription", length = 25)
+  @Basic(optional = false)
+  @Size( max = 255)
+  private String profileDescription;
+
+
   public List<String> getPreSelectedGenres() {
     if (favouriteGenres.isEmpty()) {
       return null;
@@ -118,4 +124,11 @@ public class User implements Serializable {
     roleList.add(userRole);
   }
 
+  public String getProfileDescription() {
+    return profileDescription;
+  }
+
+  public void setProfileDescription(String profileDescription) {
+    this.profileDescription = profileDescription;
+  }
 }

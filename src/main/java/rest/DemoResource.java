@@ -1,9 +1,6 @@
 package rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -29,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
 import errorhandling.API_Exception;
+import errorhandling.UserNotFoundException;
 import facades.FacadeExample;
 import facades.UserFacade;
 import utils.EMF_Creator;
@@ -179,7 +177,22 @@ public class DemoResource {
             throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
            // return errorString;
         }
+        }
 
+        @Path("updateProfile")
+        @PUT
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public String updateDescription( String description) throws UserNotFoundException, API_Exception {
+            try {
+                String thisUser = securityContext.getUserPrincipal().getName();
+                instance.updateProfileDescription(description, thisUser);
+                return "worked";
+            } catch (WebApplicationException ex) {
+                String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+                throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
+                // return errorString;
+            }
     }
 
 
