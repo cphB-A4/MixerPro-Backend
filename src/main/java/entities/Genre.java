@@ -2,6 +2,7 @@ package entities;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Table(name = "genre")
 @Entity
@@ -25,5 +26,18 @@ public class Genre {
 
     public Genre(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Genre genre = (Genre) o;
+        return Objects.equals(name, genre.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
 
+import errorhandling.API_Exception;
 import security.errorhandling.AuthenticationException;
 
 import java.util.List;
@@ -67,32 +68,34 @@ public class UserFacade {
         return new GenreDTO(genre);
     }
 
-    public String deleteGenreFromUser(String jsonGenre, String username) {
+    public String deleteGenreFromUser(String jsonGenre, String username) throws API_Exception {
         EntityManager em = emf.createEntityManager();
-        //boolean isDeleted = false;
+        boolean isDeleted = false;
         String message;
         User user;
         String genre;
 
+        //Checks input
+try {
         JsonObject json = JsonParser.parseString(jsonGenre).getAsJsonObject();
         genre = json.get("name").getAsString();
+
+    } catch (Exception e) {
+        throw new API_Exception("Malformed JSON Suplied",400,e);
+    }
         try {
              user = em.find(User.class, username);
             System.out.println(genre);
-            List<Genre> genres = user.getFavouriteGenres();
-            int arraySize = user.getFavouriteGenres().size();
-            int index = -1;
-            for (int i = 0; i < arraySize; i++) {
-                if (genres.get(i).getName().equals(genre)){
-                    index = i;
-                }
-            }
-            user.getFavouriteGenres().remove(index);
-
+           isDeleted = user.getFavouriteGenres().remove(new Genre(genre));
+           if (!isDeleted){
+               throw new WebApplicationException("Error happend during deletion", 400);
+           }
+            message = genre + "is deleted";
         } catch (WebApplicationException e) {
-            throw new WebApplicationException("contact mathias.enemark.poulsen@gmail.com");
+
+            throw new WebApplicationException(e.getMessage(),e.getResponse().getStatus());
         }
-       message = "Genre is deleted";
+
         try {
             em.getTransaction().begin();
             em.merge(user);

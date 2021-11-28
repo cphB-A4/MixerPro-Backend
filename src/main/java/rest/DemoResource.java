@@ -28,6 +28,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
+import errorhandling.API_Exception;
 import facades.FacadeExample;
 import facades.UserFacade;
 import utils.EMF_Creator;
@@ -143,7 +144,7 @@ public class DemoResource {
     @RolesAllowed("user")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public String deleteGenreFromUser (String genre){
+    public String deleteGenreFromUser (String genre) throws API_Exception {
         String thisUser = securityContext.getUserPrincipal().getName();
         EntityManager em = EMF.createEntityManager();
 
