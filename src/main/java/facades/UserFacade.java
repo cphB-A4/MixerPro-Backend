@@ -1,8 +1,12 @@
 package facades;
 
+import dtos.GenreDTO;
+import entities.Genre;
 import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.WebApplicationException;
+
 import security.errorhandling.AuthenticationException;
 
 /**
@@ -42,5 +46,19 @@ public class UserFacade {
         }
         return user;
     }
+public GenreDTO deleteGenre(String genre){
+    EntityManager em = emf.createEntityManager();
+    try {
+        em.getTransaction().begin();
+        Genre genre1 = em.find(Genre.class, genre);
+        em.remove(genre1);
+        em.getTransaction().commit();
 
+    } catch (NullPointerException | IllegalArgumentException ex) {
+        throw new WebApplicationException("Could not delete: " + genre  + " doesn't not exist", 404);
+    } finally {
+        em.close();
+    }
+    return new GenreDTO(genre);
+}
 }

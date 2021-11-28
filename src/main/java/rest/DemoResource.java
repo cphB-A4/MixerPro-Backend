@@ -29,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
 import facades.FacadeExample;
+import facades.UserFacade;
 import utils.EMF_Creator;
 import utils.HttpUtils;
 import utils.SetupTestUsers;
@@ -43,6 +44,7 @@ public class DemoResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private final FacadeExample FACADE = FacadeExample.getFacadeExample(EMF);
+    private final UserFacade instance = UserFacade.getUserFacade(EMF);
     @Context
     private UriInfo context;
 
@@ -116,13 +118,25 @@ public class DemoResource {
         return gson.toJson(usersFavouriteGenres);
     }
 
-    //delete genre from user
-public String deleteGenreFromUser (String genre){
-    String thisuser = securityContext.getUserPrincipal().getName();
+    @Path("/genre")
+    @RolesAllowed("user")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteGenre (String genre){
+    String thisUser = securityContext.getUserPrincipal().getName();
+    EntityManager em = EMF.createEntityManager();
+    try {
+        //TypedQuery<User> query = em.createQuery("DELETE  from User u WHERE u. ", entities.User.class);
+   GenreDTO genreDTO = instance.deleteGenre(genre);
+   return "{\"genre\": \" has been removed\"}";
+        //instance.deleteGenre(genre,thisUser);
+    } catch (WebApplicationException ex) {
+            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+            return errorString;
+        }
 
-    //facade.deleteGenreFromUser
+        //facade.deleteGenreFromUser
     // deleteGenreFromUser(genre, thisuser)
-        return "";
 }
 
 
