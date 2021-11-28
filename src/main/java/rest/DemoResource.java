@@ -139,6 +139,19 @@ public class DemoResource {
     // deleteGenreFromUser(genre, thisuser)
 }
 
+    @Path("/deleteGenreFromUser")
+    @RolesAllowed("user")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteGenreFromUser (String genre){
+        String thisUser = securityContext.getUserPrincipal().getName();
+        EntityManager em = EMF.createEntityManager();
+
+        String deletedMsg = instance.deleteGenreFromUser(genre, thisUser);
+
+        return gson.toJson(deletedMsg);
+    }
+
 
     @Path("{id}")
     //uncomment later

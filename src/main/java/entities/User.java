@@ -54,6 +54,10 @@ public class User implements Serializable {
     return preselectedGenresAsString;
   }
 
+  public List<Genre> getFavouriteGenres() {
+    return favouriteGenres;
+  }
+
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
       return null;
