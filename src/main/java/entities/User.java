@@ -43,7 +43,7 @@ public class User implements Serializable {
   @ManyToMany
   private List<Genre> favouriteGenres = new ArrayList<>();
 
-  @Column(name = "profileDescription", length = 25)
+  @Column(name = "profileDescription")
   @Basic(optional = false)
   @Size( max = 255)
   private String profileDescription;

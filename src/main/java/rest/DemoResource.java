@@ -179,20 +179,23 @@ public class DemoResource {
         }
         }
 
-        @Path("updateProfile")
-        @PUT
-        @Consumes(MediaType.APPLICATION_JSON)
-        @Produces(MediaType.APPLICATION_JSON)
-        public String updateDescription( String description) throws UserNotFoundException, API_Exception {
-            try {
-                String thisUser = securityContext.getUserPrincipal().getName();
-                instance.updateProfileDescription(description, thisUser);
-                return "worked";
-            } catch (WebApplicationException ex) {
-                String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
-                throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
-                // return errorString;
-            }
+    @Path("/updateProfile")
+    @PUT
+    @RolesAllowed("user")
+    //  @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String updateDescription( String description) throws UserNotFoundException, API_Exception {
+        String thisUser;
+        try {
+            thisUser = securityContext.getUserPrincipal().getName();
+            instance.updateProfileDescription(description, thisUser);
+            return "worked";
+        } catch (WebApplicationException ex) {
+            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+            throw new WebApplicationException(ex.getMessage(),ex.getResponse().getStatus());
+            // return errorString;
+        }
+
     }
 
 
