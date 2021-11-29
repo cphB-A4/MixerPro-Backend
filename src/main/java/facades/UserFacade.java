@@ -83,12 +83,12 @@ public class UserFacade {
         try {
 
             user = em.find(User.class, username);
-            user.setProfileDescription(description);
-            if (user == null) {
-                throw new UserNotFoundException();
+            boolean isDescriptionValid = user.setProfileDescription(description);
+            if (!isDescriptionValid) {
+                throw new WebApplicationException("User description too long",400);
             }
-        } catch (UserNotFoundException ex){
-            throw new UserNotFoundException(ex.getMessage());
+        } catch (WebApplicationException ex){
+            throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
         }
             try {
                 em.getTransaction().begin();

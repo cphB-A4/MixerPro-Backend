@@ -128,7 +128,13 @@ public class User implements Serializable {
     return profileDescription;
   }
 
-  public void setProfileDescription(String profileDescription) {
-    this.profileDescription = profileDescription;
+  public boolean setProfileDescription(String profileDescription) {
+    if (profileDescription.length() >= 255){
+      return false;
+    } else {
+      this.profileDescription = profileDescription;
+      return true;
+    }
+
   }
 }
