@@ -143,15 +143,14 @@ try {
         return message;
     }
 
-    public void registerUser(String usernameJSON, String passwordJSON) throws API_Exception {
+    public void registerUser(String userJSON) throws API_Exception {
         EntityManager em = emf.createEntityManager();
         String username;
         String password;
         try {
-            JsonObject json = JsonParser.parseString(usernameJSON).getAsJsonObject();
-            JsonObject jsonPass = JsonParser.parseString(passwordJSON).getAsJsonObject();
+            JsonObject json = JsonParser.parseString(userJSON).getAsJsonObject();
             username = json.get("username").getAsString();
-            password = jsonPass.get("password").getAsString();
+            password = json.get("password").getAsString();
 
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied",400,e);

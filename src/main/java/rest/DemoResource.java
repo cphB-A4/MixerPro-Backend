@@ -203,12 +203,14 @@ public class DemoResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String registerUser(String username, String password) throws API_Exception {
+    public String registerUser(String user) throws API_Exception {
         try {
-            instance.registerUser(username, password);
+            instance.registerUser(user);
             return "You have been giga populated";
         }catch(API_Exception e){
             throw new API_Exception(e.getMessage());
         }
     }
+
+
 }
