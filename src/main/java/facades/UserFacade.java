@@ -150,8 +150,8 @@ try {
         String password;
         try {
             JsonObject json = JsonParser.parseString(userJSON).getAsJsonObject();
-            username = json.get("username").getAsString();
-            password = json.get("password").getAsString();
+            username = json.get("newUsername").getAsString();
+            password = json.get("newPassword").getAsString();
 
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied",400,e);
