@@ -109,10 +109,10 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("userGenres/{username}")
-   // @RolesAllowed("user")
+    // @RolesAllowed("user")
     public String getUsersFavouriteGenres(@PathParam("username") String username) {
 
-    List<String> usersFavouriteGenres = FACADE.getUsersFavouriteGenres(username);
+        List<String> usersFavouriteGenres = FACADE.getUsersFavouriteGenres(username);
 
         return gson.toJson(usersFavouriteGenres);
     }
@@ -121,28 +121,28 @@ public class DemoResource {
     @RolesAllowed("user")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public String deleteGenre (String genre){
-    String thisUser = securityContext.getUserPrincipal().getName();
-    EntityManager em = EMF.createEntityManager();
-    try {
-        //TypedQuery<User> query = em.createQuery("DELETE  from User u WHERE u. ", entities.User.class);
-   GenreDTO genreDTO = instance.deleteGenre(genre);
-   return "{\"genre\": \" has been removed\"}";
-        //instance.deleteGenre(genre,thisUser);
-    } catch (WebApplicationException ex) {
+    public String deleteGenre(String genre) {
+        String thisUser = securityContext.getUserPrincipal().getName();
+        EntityManager em = EMF.createEntityManager();
+        try {
+            //TypedQuery<User> query = em.createQuery("DELETE  from User u WHERE u. ", entities.User.class);
+            GenreDTO genreDTO = instance.deleteGenre(genre);
+            return "{\"genre\": \" has been removed\"}";
+            //instance.deleteGenre(genre,thisUser);
+        } catch (WebApplicationException ex) {
             String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
             return errorString;
         }
 
         //facade.deleteGenreFromUser
-    // deleteGenreFromUser(genre, thisuser)
-}
+        // deleteGenreFromUser(genre, thisuser)
+    }
 
     @Path("/deleteGenreFromUser")
     @RolesAllowed("user")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public String deleteGenreFromUser (String genre) throws API_Exception {
+    public String deleteGenreFromUser(String genre) throws API_Exception {
         String thisUser = securityContext.getUserPrincipal().getName();
         EntityManager em = EMF.createEntityManager();
 
@@ -154,7 +154,7 @@ public class DemoResource {
 
     @Path("{id}")
     //uncomment later
-   // @RolesAllowed("user")
+    // @RolesAllowed("user")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -163,28 +163,29 @@ public class DemoResource {
             //[ {name: "rap"}, {name: "pop"} ]
             System.out.println(genres);
 
-            Type genreTypeList = new TypeToken<ArrayList<GenreDTO>>(){}.getType();
-            List<GenreDTO> genreDTOList = gson.fromJson(genres,genreTypeList);
+            Type genreTypeList = new TypeToken<ArrayList<GenreDTO>>() {
+            }.getType();
+            List<GenreDTO> genreDTOList = gson.fromJson(genres, genreTypeList);
             int numberOfElementInJson = genreDTOList.size();
             System.out.println(numberOfElementInJson);
             for (GenreDTO genreDTO : genreDTOList) {
                 System.out.println(genreDTO.getName());
             }
-             FACADE.addGenresToPerson(genreDTOList,username);
+            FACADE.addGenresToPerson(genreDTOList, username);
             return "worked";
         } catch (WebApplicationException ex) {
             String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
             throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
-           // return errorString;
+            // return errorString;
         }
-        }
+    }
 
     @Path("/updateProfile")
     @PUT
     @RolesAllowed("user")
     //  @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String updateDescription( String description) throws UserNotFoundException, API_Exception {
+    public String updateDescription(String description) throws UserNotFoundException, API_Exception {
         String thisUser;
         try {
             thisUser = securityContext.getUserPrincipal().getName();
@@ -192,12 +193,22 @@ public class DemoResource {
             return "worked";
         } catch (WebApplicationException ex) {
             String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
-            throw new WebApplicationException(ex.getMessage(),ex.getResponse().getStatus());
+            throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
             // return errorString;
         }
 
     }
 
-
-
+    @Path("/register")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String registerUser(String username, String password) throws API_Exception {
+        try {
+            instance.registerUser(username, password);
+            return "You have been giga populated";
+        }catch(API_Exception e){
+            throw new API_Exception(e.getMessage());
+        }
+    }
 }

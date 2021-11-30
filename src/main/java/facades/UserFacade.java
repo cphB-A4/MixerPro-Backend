@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.GenreDTO;
 import entities.Genre;
+import entities.Role;
 import entities.User;
 
 import javax.persistence.EntityManager;
@@ -140,6 +141,28 @@ try {
             em.close();
         }
         return message;
+    }
+
+    public void registerUser(String usernameJSON, String passwordJSON) throws API_Exception {
+        EntityManager em = emf.createEntityManager();
+        String username;
+        String password;
+        try {
+            JsonObject json = JsonParser.parseString(usernameJSON).getAsJsonObject();
+            JsonObject jsonPass = JsonParser.parseString(passwordJSON).getAsJsonObject();
+            username = json.get("username").getAsString();
+            password = jsonPass.get("password").getAsString();
+
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied",400,e);
+        }
+        User user = new User(username,password);
+        em.getTransaction().begin();
+        Role userRole = new Role("user");
+        user.addRole(userRole);
+        em.persist(user);
+        em.getTransaction().commit();
+        
     }
 
 }
