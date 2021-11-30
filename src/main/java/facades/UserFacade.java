@@ -145,6 +145,7 @@ try {
 
     public void registerUser(String userJSON) throws API_Exception {
         EntityManager em = emf.createEntityManager();
+        User userFromDB;
         String username;
         String password;
         try {
@@ -155,13 +156,20 @@ try {
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied",400,e);
         }
-        User user = new User(username,password);
-        em.getTransaction().begin();
-        Role userRole = new Role("user");
-        user.addRole(userRole);
-        em.persist(user);
-        em.getTransaction().commit();
-        
+        userFromDB = em.find(User.class, username);
+        if(userFromDB == null){
+            User user = new User(username,password);
+            em.getTransaction().begin();
+            Role userRole = new Role("user");
+            user.addRole(userRole);
+            em.persist(user);
+            em.getTransaction().commit(); 
+        }else{
+            throw new WebApplicationException("Username: '" + username + "' is already taken", 404);
+        }
+
+
+
     }
 
 }
