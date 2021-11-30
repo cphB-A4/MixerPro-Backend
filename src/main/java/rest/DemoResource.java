@@ -125,8 +125,9 @@ public class DemoResource {
 
         String userDescription = FACADE.getUserDescriptionById(username);
 
-        //return as String
-        return userDescription;
+        String userDescriptionAsJson = "{\"userDescription\":" + "\"" + userDescription + "\"}";
+        System.out.println("userDescription/{username} endpoint: " + userDescriptionAsJson);
+        return userDescriptionAsJson;
     }
 
     @Path("/genre")
