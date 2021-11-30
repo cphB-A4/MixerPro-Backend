@@ -64,7 +64,17 @@ public class FacadeExample {
         User user = em.find(User.class, username);
         List<String> userSFavouriteGenres = user.getPreSelectedGenres();
         return userSFavouriteGenres;
+    }
 
+    public String getUserDescriptionById(String username){
+        EntityManager em = emf.createEntityManager();
+        User user = em.find(User.class, username);
+        String userDescription = user.getProfileDescription();
+        if (userDescription == null){
+            return "No description yet.";
+        }
+        System.out.println("getUserDescriptionById: " + userDescription);
+        return userDescription;
     }
 
     public void addGenresToPerson(List<GenreDTO> genreDTOList, String username) {

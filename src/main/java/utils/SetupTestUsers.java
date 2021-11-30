@@ -56,6 +56,7 @@ public class SetupTestUsers {
     genreDTOList.add(new GenreDTO("pop"));
     fe.addGenresToPerson(genreDTOList,"user");
 
+
   }
   public static void main(String[] args) {
     populateUsers();

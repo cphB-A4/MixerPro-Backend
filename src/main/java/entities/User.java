@@ -44,7 +44,6 @@ public class User implements Serializable {
   private List<Genre> favouriteGenres = new ArrayList<>();
 
   @Column(name = "profileDescription")
-  @Basic(optional = false)
   @Size( max = 255)
   private String profileDescription;
 
@@ -128,6 +127,7 @@ public class User implements Serializable {
     return profileDescription;
   }
 
+
   public boolean setProfileDescription(String profileDescription) {
     if (profileDescription.length() >= 255){
       return false;
@@ -135,6 +135,7 @@ public class User implements Serializable {
       this.profileDescription = profileDescription;
       return true;
     }
+
 
   }
 }

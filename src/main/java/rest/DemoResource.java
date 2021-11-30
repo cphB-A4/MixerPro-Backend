@@ -117,6 +117,18 @@ public class DemoResource {
         return gson.toJson(usersFavouriteGenres);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("userDescription/{username}")
+    // @RolesAllowed("user")
+    public String getUserDescriptionById(@PathParam("username") String username) {
+
+        String userDescription = FACADE.getUserDescriptionById(username);
+
+        //return as String
+        return userDescription;
+    }
+
     @Path("/genre")
     @RolesAllowed("user")
     @DELETE
