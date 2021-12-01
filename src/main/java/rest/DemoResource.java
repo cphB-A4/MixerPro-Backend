@@ -33,9 +33,7 @@ import utils.EMF_Creator;
 import utils.HttpUtils;
 import utils.SetupTestUsers;
 
-/**
- * @author lam@cphbusiness.dk
- */
+
 @Path("info")
 public class DemoResource {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();

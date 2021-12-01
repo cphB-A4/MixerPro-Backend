@@ -3,14 +3,7 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.mindrot.jbcrypt.BCrypt;
@@ -46,6 +39,18 @@ public class User implements Serializable {
   @Column(name = "profileDescription")
   @Size( max = 255)
   private String profileDescription;
+
+
+  @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+private List<Post> posts;
+
+
+  public void addPost(Post post) {
+    if (post != null) {
+      post.setUser(this);
+      this.posts.add(post);
+    }
+  }
 
 
   public List<String> getPreSelectedGenres() {
@@ -127,6 +132,13 @@ public class User implements Serializable {
     return profileDescription;
   }
 
+  public List<Post> getPosts() {
+    return posts;
+  }
+
+  public void setPosts(List<Post> posts) {
+    this.posts = posts;
+  }
 
   public boolean setProfileDescription(String profileDescription) {
     if (profileDescription.length() >= 255){

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.GenreDTO;
 import entities.Genre;
+import entities.Post;
 import entities.Role;
 import entities.User;
 
@@ -79,27 +80,27 @@ public class UserFacade {
             description = json.get("description").getAsString();
 
         } catch (Exception e) {
-            throw new API_Exception("Malformed JSON Suplied",400,e);
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
         try {
 
             user = em.find(User.class, username);
             boolean isDescriptionValid = user.setProfileDescription(description);
             if (!isDescriptionValid) {
-                throw new WebApplicationException("User description too long",400);
+                throw new WebApplicationException("User description too long", 400);
             }
-        } catch (WebApplicationException ex){
+        } catch (WebApplicationException ex) {
             throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
         }
-            try {
-                em.getTransaction().begin();
-                em.merge(user);
-                em.getTransaction().commit();
+        try {
+            em.getTransaction().begin();
+            em.merge(user);
+            em.getTransaction().commit();
 
-    } finally {
-                em.close();
+        } finally {
+            em.close();
 
-    }
+        }
         return "Description successfully updated";
     }
 
@@ -112,24 +113,24 @@ public class UserFacade {
         String genre;
 
         //Checks input
-try {
-        JsonObject json = JsonParser.parseString(jsonGenre).getAsJsonObject();
-        genre = json.get("name").getAsString();
-
-    } catch (Exception e) {
-        throw new API_Exception("Malformed JSON Suplied",400,e);
-    }
         try {
-             user = em.find(User.class, username);
+            JsonObject json = JsonParser.parseString(jsonGenre).getAsJsonObject();
+            genre = json.get("name").getAsString();
+
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+        try {
+            user = em.find(User.class, username);
             System.out.println(genre);
-           isDeleted = user.getFavouriteGenres().remove(new Genre(genre));
-           if (!isDeleted){
-               throw new WebApplicationException("Error happend during deletion", 400);
-           }
+            isDeleted = user.getFavouriteGenres().remove(new Genre(genre));
+            if (!isDeleted) {
+                throw new WebApplicationException("Error happend during deletion", 400);
+            }
             message = genre + "is deleted";
         } catch (WebApplicationException e) {
 
-            throw new WebApplicationException(e.getMessage(),e.getResponse().getStatus());
+            throw new WebApplicationException(e.getMessage(), e.getResponse().getStatus());
         }
 
         try {
@@ -154,22 +155,58 @@ try {
             password = json.get("newPassword").getAsString();
 
         } catch (Exception e) {
-            throw new API_Exception("Malformed JSON Suplied",400,e);
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
         userFromDB = em.find(User.class, username);
-        if(userFromDB == null){
-            User user = new User(username,password);
+        if (userFromDB == null) {
+            User user = new User(username, password);
             em.getTransaction().begin();
             Role userRole = new Role("user");
             user.addRole(userRole);
             em.persist(user);
-            em.getTransaction().commit(); 
-        }else{
+            em.getTransaction().commit();
+        } else {
             throw new WebApplicationException("Username: '" + username + "' is already taken", 404);
         }
 
 
+    }
 
+    public String addPost(String postJSON, String username) {
+        EntityManager em = emf.createEntityManager();
+        User user;
+        String artist;
+        String trackName;
+        String coverURL;
+        String trackID;
+        String description;
+
+        try {
+            user = em.find(User.class, username);
+            JsonObject json = JsonParser.parseString(postJSON).getAsJsonObject();
+            artist = json.get("artist").getAsString();
+            trackName = json.get("trackName").getAsString();
+            coverURL = json.get("coverURL").getAsString();
+            trackID = json.get("trackID").getAsString();
+            description = json.get("description").getAsString();
+        } catch (Exception e) {
+            throw new WebApplicationException("Malformed JSON Suplied", 400);
+        }
+
+        try {
+            Post post = new Post(user, trackID,  trackName,  artist,  coverURL,  description);
+            em.getTransaction().begin();
+            em.persist(post);
+            //user.addPost(post);
+            //em.merge(user);
+            em.getTransaction().commit();
+
+            return "Post added";
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException(ex.getMessage());
+        } finally {
+            em.close();
+        }
     }
 
 }
