@@ -1,6 +1,5 @@
 package facades;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.GenreDTO;
@@ -11,12 +10,15 @@ import entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.WebApplicationException;
 
 import errorhandling.API_Exception;
 import errorhandling.UserNotFoundException;
+import dtos.PostDTO;
 import security.errorhandling.AuthenticationException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +42,25 @@ public class UserFacade {
             instance = new UserFacade();
         }
         return instance;
+    }
+
+    public List<PostDTO> getAllPostsByUsername(String username) throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            //User user = em.find(User.class,username);
+            TypedQuery<Post> query = em.createQuery("SELECT p FROM Post p WHERE p.user.userName = :username", Post.class);
+            query.setParameter("username", username);
+            List<Post> posts = query.getResultList();
+            List<PostDTO> postDTOS = new ArrayList<>();
+            for (Post post : posts) {
+                postDTOS.add(new PostDTO(post));
+            }
+            return postDTOS;
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException(ex.getMessage(), 500);
+        } finally {
+            em.close();
+        }
     }
 
     public User getVeryfiedUser(String username, String password) throws AuthenticationException {

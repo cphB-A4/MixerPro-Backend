@@ -2,23 +2,11 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import dtos.*;
-import entities.Post;
-import entities.User;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -26,12 +14,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
 import errorhandling.API_Exception;
-import errorhandling.UserNotFoundException;
 import facades.FacadeExample;
 import facades.UserFacade;
 import utils.EMF_Creator;
-import utils.HttpUtils;
-import utils.SetupTestUsers;
 
 
 @Path("post")
@@ -77,6 +62,19 @@ public class PostResource {
             return "Post added!";
         }catch(WebApplicationException e){
             throw new WebApplicationException(e.getMessage());
+        }
+    }
+
+    @Path("/getAllPostsByUsername/{username}")
+   // @RolesAllowed("user")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getAllPostsByUsername(@PathParam("username") String username) {
+        try {
+            List<PostDTO> list = instance.getAllPostsByUsername(username);
+            return gson.toJson(list);
+        } catch (WebApplicationException ex) {
+           throw new WebApplicationException(ex.getMessage(),ex.getResponse().getStatus());
         }
     }
 
