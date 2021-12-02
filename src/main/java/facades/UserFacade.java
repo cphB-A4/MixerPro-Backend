@@ -1,5 +1,6 @@
 package facades;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.GenreDTO;
@@ -204,6 +205,34 @@ public class UserFacade {
             return "Post added";
         } catch (RuntimeException ex) {
             throw new WebApplicationException(ex.getMessage());
+        } finally {
+            em.close();
+        }
+
+    }
+    public String deletePost(String postIdJSON, String username) throws WebApplicationException, API_Exception {
+        EntityManager em = emf.createEntityManager();
+        String postId;
+        try {
+            JsonObject json = JsonParser.parseString(postIdJSON).getAsJsonObject();
+            postId = json.get("postID").getAsString();
+
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+        try {
+            em.getTransaction().begin();
+            Post post = em.find(Post.class, postId);
+            if(post.getPost_id() == Integer.parseInt(postId) || post.getUser().getUserName() == username) {
+                em.remove(post);
+                em.getTransaction().commit();
+
+                return  "{\"msg\": \" successfully deleted\"}";
+            } return "{\"msg\": \" You can only delete your own posts\"}";
+        } catch (NullPointerException | IllegalArgumentException ex) {
+            throw new WebApplicationException("Could not delete, provided id: " + postId + " does not exist", 404);
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
         } finally {
             em.close();
         }

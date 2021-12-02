@@ -64,8 +64,6 @@ public class PostResource {
     }
 
 
-
-
     @Path("/add")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -82,4 +80,20 @@ public class PostResource {
         }
     }
 
+    @Path("/deletePost")
+    @RolesAllowed("user")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deletePost(String postId) throws API_Exception {
+        String thisUser;
+        try {
+            thisUser = securityContext.getUserPrincipal().getName();
+            String msg = instance.deletePost(postId, thisUser);
+            return msg;
+        } catch (WebApplicationException ex) {
+            //String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+            throw new WebApplicationException(ex.getMessage(),ex.getResponse().getStatus());
+            //return errorString;
+        }
+    }
 }

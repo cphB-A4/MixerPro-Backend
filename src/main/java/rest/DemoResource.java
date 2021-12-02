@@ -59,7 +59,6 @@ public class DemoResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("all")
     public String allUsers() {
-
         EntityManager em = EMF.createEntityManager();
         try {
             TypedQuery<User> query = em.createQuery("select u from User u", entities.User.class);
@@ -207,7 +206,6 @@ public class DemoResource {
             throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
             // return errorString;
         }
-
     }
 
     @Path("/register")
