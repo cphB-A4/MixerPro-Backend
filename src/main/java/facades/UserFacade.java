@@ -181,21 +181,25 @@ public class UserFacade {
         String coverURL;
         String trackID;
         String description;
+        String spotifyLinkUrl;
+        System.out.println(postJSON);
 
         try {
             user = em.find(User.class, username);
             JsonObject json = JsonParser.parseString(postJSON).getAsJsonObject();
             artist = json.get("artist").getAsString();
-            trackName = json.get("trackName").getAsString();
-            coverURL = json.get("coverURL").getAsString();
-            trackID = json.get("trackID").getAsString();
+            trackName = json.get("name").getAsString();
+            coverURL = json.get("coverUrl").getAsString();
+            trackID = json.get("trackId").getAsString();
             description = json.get("description").getAsString();
+            spotifyLinkUrl = json.get("spotifyLinkUrl").getAsString();
         } catch (Exception e) {
-            throw new WebApplicationException("Malformed JSON Suplied", 400);
+           // throw new WebApplicationException("Malformed JSON Suplied", 400);
+            throw new WebApplicationException(e.getMessage(), 400);
         }
 
         try {
-            Post post = new Post(user, trackID,  trackName,  artist,  coverURL,  description);
+            Post post = new Post(user, trackID,  trackName,  artist,  coverURL,  description, spotifyLinkUrl);
             em.getTransaction().begin();
             em.persist(post);
             //user.addPost(post);

@@ -16,17 +16,27 @@ public class Post {
     private String artist;
     private String coverURL;
     private String description;
+    private String spotifyLinkUrl;
 
     public Post() {
     }
 
-    public Post(User user, String trackID, String trackName, String artist, String coverURL, String description) {
+    public Post(User user, String trackID, String trackName, String artist, String coverURL, String description, String spotifyLinkUrl) {
         this.user = user;
         this.trackID = trackID;
         this.trackName = trackName;
         this.artist = artist;
         this.coverURL = coverURL;
         this.description = description;
+        this.spotifyLinkUrl = spotifyLinkUrl;
+    }
+
+    public String getSpotifyLinkUrl() {
+        return spotifyLinkUrl;
+    }
+
+    public void setSpotifyLinkUrl(String spotifyLinkUrl) {
+        this.spotifyLinkUrl = spotifyLinkUrl;
     }
 
     public User getUser() {
