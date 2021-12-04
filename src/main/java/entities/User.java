@@ -40,6 +40,9 @@ public class User implements Serializable {
   @Size( max = 255)
   private String profileDescription;
 
+  @Column(name = "profileGifUrl")
+  private String profileGifUrl;
+
 
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
 private List<Post> posts;
@@ -138,6 +141,14 @@ private List<Post> posts;
 
   public void setPosts(List<Post> posts) {
     this.posts = posts;
+  }
+
+  public void setProfileGifUrl(String profileGifUrl) {
+    this.profileGifUrl = profileGifUrl;
+  }
+
+  public String getProfileGifUrl() {
+    return profileGifUrl;
   }
 
   public boolean setProfileDescription(String profileDescription) {
