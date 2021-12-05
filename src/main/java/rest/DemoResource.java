@@ -234,5 +234,18 @@ public class DemoResource {
         }
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("getUserInfo/{username}")
+    public String getUserInfo(@PathParam("username")String username) throws API_Exception {
+        EntityManager em = EMF.createEntityManager();
+        try {
+            UserDTO user = instance.getUserInfo(username);
+            return gson.toJson(user);
+        } finally {
+            em.close();
+        }
+    }
+
 
 }

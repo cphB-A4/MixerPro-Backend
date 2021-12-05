@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
@@ -160,5 +162,16 @@ private List<Post> posts;
     }
 
 
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "userName='" + userName + '\'' +
+            ", favouriteGenres=" + favouriteGenres +
+            ", profileDescription='" + profileDescription + '\'' +
+            ", profileGifUrl='" + profileGifUrl + '\'' +
+            ", posts=" + posts +
+            '}';
   }
 }

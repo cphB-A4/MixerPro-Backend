@@ -3,6 +3,7 @@ package facades;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dtos.GenreDTO;
+import dtos.UserDTO;
 import entities.Genre;
 import entities.Post;
 import entities.Role;
@@ -222,9 +223,9 @@ public class UserFacade {
         try {
             Post post = new Post(user, trackID,  trackName,  artist,  coverURL,  description, spotifyLinkUrl);
             em.getTransaction().begin();
-            em.persist(post);
-            //user.addPost(post);
-            //em.merge(user);
+            //em.persist(post); //User does not know about post if we persist the post directly
+            user.addPost(post);
+            em.merge(user);
             em.getTransaction().commit();
 
             return "Post added";
@@ -276,6 +277,21 @@ public class UserFacade {
         } finally {
             em.close();
         }
+    }
+
+    public UserDTO getUserInfo(String username){
+        EntityManager em = emf.createEntityManager();
+        User user;
+        UserDTO userDTO;
+        try {
+            user = em.find(User.class, username);
+            userDTO = new UserDTO(user);
+        } catch (Exception e) {
+            // throw new WebApplicationException("Malformed JSON Suplied", 400);
+            throw new WebApplicationException(e.getMessage(), 400);
+        }
+
+        return userDTO;
     }
 
 
