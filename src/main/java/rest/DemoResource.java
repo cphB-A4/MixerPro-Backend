@@ -221,5 +221,18 @@ public class DemoResource {
         }
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("searchForUser/{username}")
+    public String allSearchedUsers(@PathParam("username")String searchedName) throws API_Exception {
+        EntityManager em = EMF.createEntityManager();
+        try {
+            List<String> usernames = instance.getUsernameBySearching(searchedName);
+            return gson.toJson(usernames);
+        } finally {
+            em.close();
+        }
+    }
+
 
 }

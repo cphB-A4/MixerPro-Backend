@@ -263,4 +263,20 @@ public class UserFacade {
         }
     }
 
+    public List<String> getUsernameBySearching(String searchedUsernameURL) throws API_Exception {
+        EntityManager em = emf.createEntityManager();
+        try {
+            //limit to 10
+            TypedQuery<String> query = em.createQuery("SELECT u.userName FROM User u WHERE u.userName LIKE :searchedUsername", String.class).setMaxResults(10);
+            query.setParameter("searchedUsername", "%"+searchedUsernameURL+"%");
+            List<String> usernames = query.getResultList();
+            return usernames;
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException(ex.getMessage(), 500);
+        } finally {
+            em.close();
+        }
+    }
+
+
 }
