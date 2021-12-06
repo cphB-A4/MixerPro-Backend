@@ -20,7 +20,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
 
-import static privateKeys.PrivateApiKeys.API_KEY_GIPHY;
+//import static privateKeys.PrivateApiKeys.API_KEY_GIPHY;
 
 /**
  * @author lam@cphbusiness.dk
@@ -48,7 +48,7 @@ public class GiphyFacade {
     }
 
     public List<String> getTrendingGifs() throws MalformedURLException {
-        String url = "https://api.giphy.com/v1/gifs/trending" + API_KEY_GIPHY;
+        String url = "https://api.giphy.com/v1/gifs/trending?api_key=" + System.getenv("GIPHY");
         System.out.println(System.getenv("GIPHY"));
 
         try {
