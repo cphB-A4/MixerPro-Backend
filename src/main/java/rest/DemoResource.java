@@ -107,6 +107,8 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("userGenres/{username}")
+
+
     // @RolesAllowed("user")
     public String getUsersFavouriteGenres(@PathParam("username") String username) {
 
