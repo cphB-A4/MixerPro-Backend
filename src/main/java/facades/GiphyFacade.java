@@ -20,7 +20,7 @@ import java.net.http.HttpResponse;
 import java.util.*;
 
 /**
- * @author lam@cphbusiness.dk
+
  */
 public class GiphyFacade {
 
