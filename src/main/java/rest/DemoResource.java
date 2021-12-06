@@ -45,6 +45,7 @@ public class DemoResource {
     @Context
     private UriInfo context;
 
+
     @Context
     SecurityContext securityContext;
 
