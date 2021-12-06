@@ -91,7 +91,7 @@ public class PostResource {
         } catch (WebApplicationException ex) {
             //String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
             throw new WebApplicationException(ex.getMessage(),ex.getResponse().getStatus());
-            //return errorString;
+            //return errorString;//
         }
     }
 }
