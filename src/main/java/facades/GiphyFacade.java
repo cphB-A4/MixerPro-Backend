@@ -51,6 +51,8 @@ public class GiphyFacade {
         String url = "https://api.giphy.com/v1/gifs/trending?api_key=" + System.getenv("GIPHY");
         System.out.println(System.getenv("GIPHY"));
 
+
+
         try {
 
             URL myurl = new URL(url);
