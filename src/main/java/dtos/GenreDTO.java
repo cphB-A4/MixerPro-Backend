@@ -23,6 +23,8 @@ public class GenreDTO {
         this.name = genre.getName();
     }
 
+
+
     public GenreDTO(String name) {
         this.name = name;
     }
