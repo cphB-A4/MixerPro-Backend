@@ -49,6 +49,7 @@ public class GiphyFacade {
 
     public List<String> getTrendingGifs() throws MalformedURLException {
         String url = "https://api.giphy.com/v1/gifs/trending" + API_KEY_GIPHY;
+        System.out.println(System.getenv("GIPHY"));
 
         try {
 
