@@ -2,6 +2,7 @@ package utils;
 
 
 import dtos.GenreDTO;
+import entities.Genre;
 import entities.Role;
 import entities.User;
 import facades.FacadeExample;
@@ -57,7 +58,35 @@ public class SetupTestUsers {
     fe.addGenresToPerson(genreDTOList,"user");
 
     */
+  }
+  public static void addGenres(){
+      EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
+      EntityManager em = emf.createEntityManager();
 
+      Genre genre = new Genre("acoustic");
+      Genre genre1 = new Genre("afrobeat");
+      Genre genre2 = new Genre("alt-rock");
+      Genre genre3 = new Genre("alternative");
+      Genre genre4 = new Genre("ambient");
+      em.getTransaction().begin();
+
+
+              /*
+              INSERT INTO GENRE VALUES ('acoustic');
+INSERT INTO GENRE VALUES ('afrobeat');
+INSERT INTO GENRE VALUES ('alt-rock');
+INSERT INTO GENRE VALUES ('alternative');
+INSERT INTO GENRE VALUES ('ambient');
+               */
+
+
+      em.persist(genre);
+      em.persist(genre1);
+      em.persist(genre2);
+      em.persist(genre3);
+      em.persist(genre4);
+
+      em.getTransaction().commit();
 
   }
   public static void main(String[] args) {
