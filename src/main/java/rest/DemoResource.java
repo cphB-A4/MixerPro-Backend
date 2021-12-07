@@ -253,7 +253,7 @@ public class DemoResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("runGenre")
+    @Path("/runGenre")
     public String runGenreScript() {
 
         SetupTestUsers.addGenres();

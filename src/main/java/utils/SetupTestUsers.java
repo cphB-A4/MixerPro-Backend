@@ -70,16 +70,6 @@ public class SetupTestUsers {
       Genre genre4 = new Genre("ambient");
       em.getTransaction().begin();
 
-
-              /*
-              INSERT INTO GENRE VALUES ('acoustic');
-INSERT INTO GENRE VALUES ('afrobeat');
-INSERT INTO GENRE VALUES ('alt-rock');
-INSERT INTO GENRE VALUES ('alternative');
-INSERT INTO GENRE VALUES ('ambient');
-               */
-
-
       em.persist(genre);
       em.persist(genre1);
       em.persist(genre2);
