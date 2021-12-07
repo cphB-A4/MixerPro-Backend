@@ -22,7 +22,7 @@ public class GenreDTO {
     public GenreDTO(Genre genre) {
         this.name = genre.getName();
     }
-//hej
+//hejmeddig
 
 
     public GenreDTO(String name) {
