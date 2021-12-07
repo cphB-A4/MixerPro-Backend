@@ -6,6 +6,9 @@ import java.util.Objects;
 
 @Table(name = "genre")
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Genre.deleteAllRows", query = "DELETE from Genre")
+})
 public class Genre {
     @Id
     @Column(name = "genre_name", nullable = false)

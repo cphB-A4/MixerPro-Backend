@@ -31,6 +31,7 @@ import facades.FacadeExample;
 import facades.UserFacade;
 import utils.EMF_Creator;
 import utils.HttpUtils;
+import utils.ScriptUtils;
 import utils.SetupTestUsers;
 
 
@@ -248,6 +249,24 @@ public class DemoResource {
         } finally {
             em.close();
         }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("runGenre")
+    public String runGenreScript(@PathParam("username")String username) {
+        EntityManager em = EMF.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            // Dropping the table each time because otherwise it may cause multiple entry errors
+            em.createNamedQuery("Genre.deleteAllRows").executeUpdate();
+            ScriptUtils.runSQLScript("genreScript.sql", em);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return "You have been genred";
     }
 
 
