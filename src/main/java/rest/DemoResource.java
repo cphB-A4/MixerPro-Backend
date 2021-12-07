@@ -255,10 +255,18 @@ public class DemoResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/runGenre")
     public String runGenreScript() {
+        EntityManager em = EMF.createEntityManager();
 
-        SetupTestUsers.addGenres();
-        return "You have been populated";
-        //
+        try {
+            em.getTransaction().begin();
+            // Dropping the table each time because otherwise it may cause multiple entry errors
+            em.createNamedQuery("Genre.deleteAllRows").executeUpdate();
+            ScriptUtils.runSQLScript("genresScript.sql", em);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return "You have been genred";
     }
 
 
