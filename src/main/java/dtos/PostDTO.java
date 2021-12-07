@@ -9,6 +9,7 @@ public class PostDTO {
     String spotifyLinkUrl;
     String track;
 
+
     public PostDTO(String artist, String coverUrl, String description, String spotifyLinkUrl, String track) {
         this.artist = artist;
         this.coverUrl = coverUrl;
