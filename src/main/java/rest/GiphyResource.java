@@ -26,7 +26,7 @@ public class GiphyResource {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
-    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+    private final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private final GiphyFacade giphyFacade = GiphyFacade.getGiphyFacade(EMF);
 
     @Context

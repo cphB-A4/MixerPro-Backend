@@ -40,7 +40,7 @@ public class DemoResource {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
-    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+    private final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private final FacadeExample FACADE = FacadeExample.getFacadeExample(EMF);
     private final UserFacade instance = UserFacade.getUserFacade(EMF);
     @Context

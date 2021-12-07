@@ -14,10 +14,10 @@ import javax.ws.rs.core.MediaType;
 @Path("xxx")
 public class RenameMeResource {
 
-    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+    private final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
        
-    private static final FacadeExample FACADE =  FacadeExample.getFacadeExample(EMF);
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private final FacadeExample FACADE =  FacadeExample.getFacadeExample(EMF);
+    private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
             
     @GET
     @Produces({MediaType.APPLICATION_JSON})
