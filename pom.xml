@@ -130,11 +130,6 @@
             <artifactId>properties-maven-plugin</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>dat.sem3</groupId>
-            <artifactId>Spotify-Backend</artifactId>
-            <version>1.0.1</version>
-        </dependency>
 
     </dependencies>
 
