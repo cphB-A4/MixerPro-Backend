@@ -51,10 +51,12 @@ public class SetupTestUsers {
     System.out.println("Created TEST Users");
 
     //Test user_genre table
-    List<GenreDTO> genreDTOList = new ArrayList<>();
+   /* List<GenreDTO> genreDTOList = new ArrayList<>();
     genreDTOList.add(new GenreDTO("rap"));
     genreDTOList.add(new GenreDTO("pop"));
     fe.addGenresToPerson(genreDTOList,"user");
+
+    */
 
 
   }
