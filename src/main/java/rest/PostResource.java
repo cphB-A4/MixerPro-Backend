@@ -47,7 +47,7 @@ public class PostResource {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to User: " + thisuser + "\"}";
     }
-
+//
 
     @Path("/add")
     @POST
