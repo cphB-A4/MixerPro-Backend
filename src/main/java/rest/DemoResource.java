@@ -99,7 +99,7 @@ public class DemoResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("genres")
+    @Path("/genres")
     public String showAllGenres() {
         List<GenreDTO> allGenres = FACADE.getAllGenres();
         return /*"\"genres\":" +  */gson.toJson(allGenres);
@@ -107,7 +107,7 @@ public class DemoResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("userGenres/{username}")
+    @Path("/userGenres/{username}")
 
 
     // @RolesAllowed("user")
