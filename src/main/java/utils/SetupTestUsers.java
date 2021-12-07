@@ -190,7 +190,7 @@ public class SetupTestUsers {
      genres.add(new Genre("trip-hop"));
      genres.add(new Genre("turkish"));
      genres.add(new Genre("work-out"));
-     genres.add(new Genre("work-out"));
+     genres.add(new Genre("world-music"));
       em.getTransaction().begin();
       for (Genre genre:genres) {
           em.persist(genre);
