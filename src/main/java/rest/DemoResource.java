@@ -261,7 +261,7 @@ public class DemoResource {
             em.getTransaction().begin();
             // Dropping the table each time because otherwise it may cause multiple entry errors
             em.createNamedQuery("Genre.deleteAllRows").executeUpdate();
-            ScriptUtils.runSQLScript("genreScript.sql", em);
+            ScriptUtils.runSQLScript("genresScript.sql", em);
             em.getTransaction().commit();
         } finally {
             em.close();
