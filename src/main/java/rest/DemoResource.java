@@ -254,7 +254,7 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("runGenre")
-    public String runGenreScript(@PathParam("username")String username) {
+    public String runGenreScript() {
         EntityManager em = EMF.createEntityManager();
 
         try {
