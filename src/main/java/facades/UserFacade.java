@@ -294,5 +294,22 @@ public class UserFacade {
         return userDTO;
     }
 
+    public UserDTO deleteUser(String username) throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            User user = em.find(User.class, username);
+            em.remove(user);
+            em.getTransaction().commit();
+            return new UserDTO(user);
+        } catch (NullPointerException | IllegalArgumentException ex) {
+            throw new WebApplicationException("Could not delete, provided username: " + username + " does not exist", 404);
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
+        } finally {
+            em.close();
+        }
+    }
+
 
 }
