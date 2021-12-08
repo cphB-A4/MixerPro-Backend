@@ -16,6 +16,7 @@ public class ScriptUtils {
 
         Connection connection = em.unwrap(Connection.class);
         ScriptRunner runner = new ScriptRunner(connection);
+        System.out.println(runner.toString());
 
         System.out.println("Running script: " + fileName);
         runner.runScript(new BufferedReader(new InputStreamReader(stream)));
