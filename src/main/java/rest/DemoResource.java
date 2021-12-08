@@ -261,16 +261,15 @@ public class DemoResource {
         //
     }
     @Path("/deleteUser/{username}")
-    @GET
+    @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteUser(@PathParam("username") String username) {
         try {
             UserDTO userDTO = instance.deleteUser(username);
             System.out.println(userDTO);
-            return "{\"status\": \"removed\"}";
+            return gson.toJson(userDTO);
         } catch (WebApplicationException ex) {
-            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
-            return errorString;
+          throw new WebApplicationException(ex.getMessage(),ex.getResponse().getStatus());
         }
 
     }
