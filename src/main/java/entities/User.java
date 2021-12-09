@@ -47,7 +47,7 @@ public class User implements Serializable {
 
 
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-private List<Post> posts;
+private List<Post> posts = new ArrayList<>();
 
 
   public void addPost(Post post) {

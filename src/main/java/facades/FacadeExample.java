@@ -2,6 +2,7 @@ package facades;
 
 import dtos.GenreDTO;
 import dtos.RenameMeDTO;
+import dtos.UserDTO;
 import entities.Genre;
 import entities.RenameMe;
 
@@ -77,7 +78,7 @@ public class FacadeExample {
         return userDescription;
     }
 
-    public void addGenresToPerson(List<GenreDTO> genreDTOList, String username) {
+    public UserDTO addGenresToUser(List<GenreDTO> genreDTOList, String username) {
         EntityManager em = emf.createEntityManager();
         List<Genre> genreList = new ArrayList<>();
         User user = em.find(User.class, username);
@@ -111,6 +112,9 @@ public class FacadeExample {
         } finally {
             em.close();
         }
+
+        UserDTO userDTO = new UserDTO(user);
+        return userDTO;
 
     }
 

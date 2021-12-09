@@ -159,22 +159,27 @@ public class DemoResource {
     public String deleteGenreFromUser(String genre) throws API_Exception {
         String thisUser = securityContext.getUserPrincipal().getName();
         EntityManager em = EMF.createEntityManager();
+        String deletedMsg;
+        try {
+            deletedMsg = instance.deleteGenreFromUser(genre, thisUser);
+        } catch (WebApplicationException e){
+            throw new WebApplicationException(e.getMessage(),e.getResponse().getStatus());
+        }
 
-        String deletedMsg = instance.deleteGenreFromUser(genre, thisUser);
-
+        System.out.println(deletedMsg);
         return gson.toJson(deletedMsg);
     }
 
 
     @Path("{id}")
     //uncomment later
-    // @RolesAllowed("user")
+     @RolesAllowed("user")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String addEditGenres(@PathParam("id") String username, String genres) {
+    public String addGenresToUser(@PathParam("id") String username, String genres) {
         try {
-            //[ {name: "rap"}, {name: "pop"} ]
+            //[ {"name": "rap"}, {"name": "pop"} ]
             System.out.println(genres);
 
             Type genreTypeList = new TypeToken<ArrayList<GenreDTO>>() {
@@ -185,8 +190,8 @@ public class DemoResource {
             for (GenreDTO genreDTO : genreDTOList) {
                 System.out.println(genreDTO.getName());
             }
-            FACADE.addGenresToPerson(genreDTOList, username);
-            return "worked";
+            UserDTO userDTO = FACADE.addGenresToUser(genreDTOList, username);
+            return gson.toJson(userDTO);
         } catch (WebApplicationException ex) {
             String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
             throw new WebApplicationException(ex.getMessage(), ex.getResponse().getStatus());
@@ -228,11 +233,12 @@ public class DemoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("searchForUser/{username}")
-    public String allSearchedUsers(@PathParam("username")String searchedName) throws API_Exception {
+    public String getUsernameBySearching(@PathParam("username")String searchedName) throws API_Exception {
         EntityManager em = EMF.createEntityManager();
         try {
             List<String> usernames = instance.getUsernameBySearching(searchedName);
-            return gson.toJson(usernames);
+           // return gson.toJson(usernames);
+            return new Gson().toJson(usernames);
         } finally {
             em.close();
         }

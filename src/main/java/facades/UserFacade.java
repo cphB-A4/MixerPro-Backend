@@ -98,6 +98,7 @@ public class UserFacade {
         EntityManager em = emf.createEntityManager();
         User user;
         String description;
+        //{"description: "my test description""}
         try {
             JsonObject json = JsonParser.parseString(jsonDescription).getAsJsonObject();
             description = json.get("description").getAsString();
@@ -136,11 +137,15 @@ public class UserFacade {
         String genre;
 
         //Checks input
+        //{"name": "hip-hop"}
         try {
             JsonObject json = JsonParser.parseString(jsonGenre).getAsJsonObject();
+            System.out.println("jsonGenre" + jsonGenre);
             genre = json.get("name").getAsString();
+            System.out.println("genre" + genre);
 
         } catch (Exception e) {
+            System.out.println("malformed");
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
         try {
@@ -148,11 +153,13 @@ public class UserFacade {
             System.out.println(genre);
             isDeleted = user.getFavouriteGenres().remove(new Genre(genre));
             if (!isDeleted) {
+                System.out.println("could not delete");
                 throw new WebApplicationException("Error happend during deletion", 400);
             }
-            message = genre + "is deleted";
+            //String jsonGenre = "[ {\"name\": \"rap\"}, {\"name\": \"pop\"} ]";
+            message = genre;
         } catch (WebApplicationException e) {
-
+            System.out.println("web");
             throw new WebApplicationException(e.getMessage(), e.getResponse().getStatus());
         }
 
@@ -240,6 +247,7 @@ public class UserFacade {
         EntityManager em = emf.createEntityManager();
         String postId;
         try {
+            //{"postID": "1"}
             JsonObject json = JsonParser.parseString(postIdJSON).getAsJsonObject();
             postId = json.get("postID").getAsString();
 

@@ -1,5 +1,7 @@
 package rest;
 
+import entities.Genre;
+import entities.Post;
 import entities.User;
 import entities.Role;
 
@@ -13,16 +15,14 @@ import java.net.URI;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
+
+import io.restassured.response.ResponseBody;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 
 @Disabled
@@ -81,6 +81,24 @@ public class LoginEndpointTest {
             User both = new User("user_admin", "test");
             both.addRole(userRole);
             both.addRole(adminRole);
+
+            //adding genres to user
+            Genre genre = new Genre("hip-hop");
+            Genre genre1 = new Genre("alt-rock");
+            user.addGenre(genre);
+            user.addGenre(genre1);
+            em.persist(genre);
+            em.persist(genre1);
+
+            //adding description to user
+            user.setProfileDescription("test description");
+
+            //adding test post to user
+            Post post =  new Post(user,"1","In da club", "50 cent", "coverUrl","in da club er en fed sang", "testSpotifyUrl");
+            user.addPost(post);
+            //em.persist(post); //No need for persisting because posts er marked: FetchType.EAGER
+
+
             em.persist(userRole);
             em.persist(adminRole);
             em.persist(user);
@@ -253,5 +271,195 @@ public class LoginEndpointTest {
                 .body("dogDTO.status", equalTo("success"))
                 .body("ipDTO", notNullValue());
     }
+
+    @Test
+    @DisplayName("US2.1: Update fav genres user")
+    public void testUs2AddGenresToUser(){
+        /*String jsonGenre = "[ {\"name\": \"rap\"}, {\"name\": \"pop\"} ]";
+        login("user", "test");
+        ResponseBody responseBody = given()
+                .contentType("application/json").body(jsonGenre)
+                .header("x-access-token", securityToken)
+                .when()
+                .put("/info/user")
+    .getBody();
+        System.out.println(responseBody.asString());
+        */
+        String jsonGenre = "[ {\"name\": \"rap\"}, {\"name\": \"pop\"} ]";
+        login("user", "test");
+        given()
+                .contentType("application/json").body(jsonGenre)
+                .header("x-access-token", securityToken)
+                .when()
+                .put("/info/user").
+                then().assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("username", notNullValue())
+                .body("favouriteGenres[2].name", equalTo("rap"))
+                .body("favouriteGenres.size()", equalTo(4));//test the array size
+    }
+
+
+    @Test
+    @DisplayName("US2.2 : Delete genre from user")
+    public void testUs2deleteGenreFromUser(){
+        //TODO: Virker ikke - HVORFOR??
+    ///deleteGenreFromUser
+        //{"name": "hip-hop"}
+        //System.out.println();
+        String jsonGenre = "{\"name\": \"hip-hop\"}";
+        System.out.println("jsonGenre: " + jsonGenre);
+        login("user", "test");
+   /*     given()
+                .contentType("application/json").body(jsonGenre)
+                .header("x-access-token", securityToken)
+                .when()
+                .delete("/info/deleteGenreFromUser").
+                then().assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("", notNullValue())
+                .body("", equalTo("hip-hop"));*/
+
+        ResponseBody responseBody = given()
+                .contentType("application/json").body(jsonGenre)
+                .header("x-access-token", securityToken)
+                .when()
+                .delete("/info/deleteGenreFromUser")
+                .getBody();
+        System.out.println(responseBody.asString());
+
+    }
+
+/*
+ //Utility method to login and set the returned securityToken
+    private static void login(String role, String password) {
+        String json = String.format("{username: \"%s\", password: \"%s\"}", role, password);
+        securityToken = given()
+                .contentType("application/json")
+                .body(json)
+                //.when().post("/api/login")
+                .when().post("/login")
+                .then()
+                .extract().path("token");
+        //System.out.println("TOKEN ---> " + securityToken);
+    }
+
+ */
+
+    @Test
+    @DisplayName("US 4: update profile description")
+    public void testUs4UpdateProfile(){
+        //updateProfile
+        String jsonDescription = "{\"description\": \"my test description\"}";
+        System.out.println(jsonDescription);
+        login("user", "test");
+        given()
+                .contentType("application/json").body(jsonDescription)
+                .header("x-access-token", securityToken)
+                .when()
+                .put("/info/updateProfile").
+                then().assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body(equalTo("worked"));
+
+    }
+    @Test
+    @DisplayName("US 4.2: handle too long profile description")
+    public void testUs4UpdateProfileTooLongDescription(){
+        //updateProfile
+        login("user", "test");
+        String jsonDescription = "{\"description\": \"my test description my test description my test description my test description my test description my test description my test description my test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test descriptionmy test description\"}";
+        given()
+                .contentType("application/json").body(jsonDescription)
+                .header("x-access-token", securityToken)
+                .when()
+                .put("/info/updateProfile").then()
+                .statusCode(400);
+    }
+
+    @Test
+    @DisplayName("US 6: Add a post")
+    public void testUs6addPost(){
+        String jsonPost = "{\"trackId\":\"4RY96Asd9IefaL3X4LOLZ8\",\"name\":\"In Da Club\",\"artist\":\"50 Cent\",\"coverUrl\":\"https://i.scdn.co/image/ab67616d0000b273f7f74100d5cc850e01172cbf\",\"spotifyLinkUrl\":\"https://open.spotify.com/track/4RY96Asd9IefaL3X4LOLZ8\",\"description\":\"test post-description\"}";
+        System.out.println(jsonPost);
+        login("user", "test");
+        given()
+                .contentType("application/json").body(jsonPost)
+                .header("x-access-token", securityToken)
+                .when()
+                .post("/post/add").then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body(equalTo("Post added!"));
+    }
+
+    @Test
+    @DisplayName("US 7: View other peoples profiles")
+    public void testUs7getUserInfo(){
+        login("user", "test");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/info/getUserInfo/user").then()
+                .statusCode(200)
+                .body("username",equalTo("user"))
+                .body("profileDescription",equalTo("test description"));
+    }
+
+    @Test
+    @DisplayName("US 8: Delete a post")
+    public void testUs8deletePost(){
+        login("user", "test");
+
+        //TODO: Virker heller ikke..
+        //{"postID": "1"}
+        String postIDJson = "{\"postID\": \"1\"}";
+        /*ResponseBody responseBody = given()
+                .contentType("application/json").body(postIDJson)
+                .header("x-access-token", securityToken)
+                .when()
+                .delete("/post/deletePost").getBody();
+        System.out.println(responseBody.asString());*/
+       /* given()
+                .contentType("application/json").body(postIDJson)
+                .header("x-access-token", securityToken)
+                .when()
+                .delete("/post/deletePost").then()
+                .statusCode(200);*/
+    }
+
+    @Test
+    @DisplayName("US 9: update profile gifUrl")
+    public void testUs9updateProfileGifUrl(){
+        //updateProfile
+        String jsonGifUrl = "{\"gifUrl\": \"fiktiv gif url\"}";
+        System.out.println(jsonGifUrl);
+        login("user", "test");
+        given()
+                .contentType("application/json").body(jsonGifUrl)
+                .header("x-access-token", securityToken)
+                .when()
+                .put("/giphy/updateProfileGifUrl").
+                then().assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body(equalTo("worked"));
+
+    }
+
+    @Test
+    @DisplayName("Us 10: admin overview of all users")
+    public void testUs10getUsernameBySearching() {
+        login("user", "test");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .when()
+                .get("/info/searchForUser/u").then()
+                .statusCode(200)
+                .body(equalTo("[\"user\",\"user_admin\"]"));
+        //arrayContaining virker ikke??
+    }
+
 
 }
