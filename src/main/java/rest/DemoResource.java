@@ -267,7 +267,7 @@ public class DemoResource {
         //
     }
     @Path("/deleteUser/{username}")
-    //@RolesAllowed("admin")
+    @RolesAllowed("admin")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteUser(@PathParam("username") String username) {
