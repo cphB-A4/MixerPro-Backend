@@ -91,7 +91,7 @@ public class DemoResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("populateUsers")
+    @Path("populate")
     public String populate() {
         SetupTestUsers.populateUsers();
         return "You have been populated";
