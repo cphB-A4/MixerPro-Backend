@@ -4,7 +4,10 @@ import com.google.gson.*;
 import entities.User;
 import errorhandling.API_Exception;
 import errorhandling.UserNotFoundException;
+<<<<<<< HEAD
 //import privateKeys.PrivateApiKeys;
+=======
+>>>>>>> 3dcb36896b7313e4c40361f63d8ae7e6a7cbfcc7
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,10 +20,13 @@ import javax.ws.rs.WebApplicationException;
 import java.io.IOException;
 import java.util.*;
 
+<<<<<<< HEAD
 //import static privateKeys.PrivateApiKeys.API_KEY_GIPHY;
 
+=======
+>>>>>>> 3dcb36896b7313e4c40361f63d8ae7e6a7cbfcc7
 /**
- * @author lam@cphbusiness.dk
+
  */
 public class GiphyFacade {
 
